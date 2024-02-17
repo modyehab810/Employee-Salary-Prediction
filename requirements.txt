@@ -1,0 +1,6 @@
+streamlit
+streamlit_option_menu
+gunicorn==19.7.1
+numpy
+pandas
+plotly
