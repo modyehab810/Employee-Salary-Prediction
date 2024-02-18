@@ -32,13 +32,6 @@ def run():
     @st.cache_data
     def load_data(the_file_path):
         df = pd.read_csv(the_file_path)
-        df.columns = df.columns.str.replace(" ",  "_").str.replace(".", "")
-        df.rename(columns={
-            "Time_on_App": "App_Usage",
-            "Time_on_Website": "Website_Usage",
-            "Length_of_Membership": "Membership_Length",
-            "Yearly_Amount_Spent": "Yearly_Spent"
-        }, inplace=True)
         return df
 
     # Function To Load Our Dataset
@@ -51,8 +44,6 @@ def run():
     model = load_linear_regression_model(
         "random_forest_regressor_salary_predictor_v1.pkl")
 
-    # model = load_linear_regression_model(
-    #     "lasso_linear_regression_salary_predictor_v1.pkl")
 
     # Function To Valid Input Data
     @st.cache_data
@@ -328,77 +319,87 @@ Education Level"""
                                     st.subheader(f"{np.round(91.85, 2)}%")
 
                 if prediction_option == "From File":
-                    st.info("Please upload your file with the following columns' names in the same order\n\
-                            ['Age', 'Years of Experience', 'Education Level']", icon="ℹ️")
+                    st.warning("Please upload your file with the following columns' names in the same order\n\
+                            ['Age', 'Years of Experience', 'Education Level']", icon="⚠️")
 
                     test_file = st.file_uploader("Upload Your Test File 📂")
 
                     if test_file is not None:
-                        X_test = pd.read_csv(test_file)
-                        X_test.dropna(inplace=True)
-
-                        if validate_test_file(X_test.columns.to_list()):
-                            X_test_encodded = pd.get_dummies(
-                                X_test, columns=["Education Level"], drop_first=True) * 1
-                            st.info(X_test_encodded.columns)
-
+                        extention = test_file.name.split(".")[-1]
+                        if extention.lower() != "csv":
+                            st.error("Please, Upload CSV FILE ONLY")
                         else:
-                            X_test = X_test[[
-                                'Age', 'Years of Experience', 'Education Level']]
+                            X_test = pd.read_csv(test_file)
+                            X_test.dropna(inplace=True)
 
-                            X_test_encodded = pd.get_dummies(
-                                X_test, columns=["Education Level"], drop_first=True) * 1
+                            if validate_test_file(X_test.columns.to_list()):
+                                X_test_encodded = pd.get_dummies(
+                                    X_test, columns=["Education Level"], drop_first=True) * 1
+                                st.info(X_test_encodded.columns)
 
-                            st.info(X_test_encodded.columns)
+                            else:
+                                X_test = X_test[[
+                                    'Age', 'Years of Experience', 'Education Level']]
 
-                        all_predicted_values = model.predict(X_test_encodded)
+                                X_test_encodded = pd.get_dummies(
+                                    X_test, columns=["Education Level"], drop_first=True) * 1
 
-                        final_complete_file = pd.concat([X_test, pd.DataFrame(all_predicted_values,
-                                                                              columns=["Predicted Salary"])], axis=1)
+                                st.info(X_test_encodded.columns)
 
-                        st.write("")
+                            all_predicted_values = model.predict(
+                                X_test_encodded)
 
-                        st.dataframe(final_complete_file,
-                                     use_container_width=True,)
+                            final_complete_file = pd.concat([X_test, pd.DataFrame(all_predicted_values,
+                                                                                  columns=["Predicted Salary"])], axis=1)
+
+                            st.write("")
+
+                            st.dataframe(final_complete_file,
+                                         use_container_width=True,)
 
                     with st.form("comaprison_form"):
 
                         if st.form_submit_button("Compare Predicted"):
                             st.info(
-                                "Be Sure Your Actual Values File HAS ONLY One Column", icon="ℹ️")
+                                "Be Sure Your Actual Values File HAS ONLY One Column (Actual Salary)", icon="ℹ️")
 
                             actual_file = st.file_uploader(
                                 "Upload Your Actual Salary File 📂")
 
                             if actual_file is not None and test_file is not None:
-                                y_test = pd.read_csv(actual_file).iloc[:, -1]
-                                y_test.dropna(inplace=True)
+                                if actual_file.name.split(".")[-1].lower() != "csv":
+                                    st.error("Please, Upload CSV FILE ONLY")
+                                else:
 
-                                col1, col2 = st.columns(2)
+                                    y_test = pd.read_csv(
+                                        actual_file).iloc[:, -1]
+                                    y_test.dropna(inplace=True)
 
-                                with col1:
-                                    test_score = np.round(
-                                        model.score(X_test_encodded, y_test) * 100, 2)
-                                    prediction.creat_matrix_score_cards("imgs/accuracy.png",
-                                                                        "Prediction Accuracy",
-                                                                        test_score,
-                                                                        True
-                                                                        )
+                                    col1, col2 = st.columns(2)
 
-                                with col2:
-                                    mse = mean_squared_error(
+                                    with col1:
+                                        test_score = np.round(
+                                            model.score(X_test_encodded, y_test) * 100, 2)
+                                        prediction.creat_matrix_score_cards("imgs/accuracy.png",
+                                                                            "Prediction Accuracy",
+                                                                            test_score,
+                                                                            True
+                                                                            )
+
+                                    with col2:
+                                        mse = mean_squared_error(
+                                            y_test, all_predicted_values)
+                                        prediction.creat_matrix_score_cards("imgs/question.png",
+                                                                            "Error Ratio", f'{np.sqrt(mse):,.2f}', False)
+
+                                    predicted_df = prediction.create_comparison_df(
                                         y_test, all_predicted_values)
-                                    prediction.creat_matrix_score_cards("imgs/question.png",
-                                                                        "Error Ratio", f'{np.sqrt(mse):,.2f}', False)
 
-                                predicted_df = prediction.create_comparison_df(
-                                    y_test, all_predicted_values)
+                                    st.dataframe(
+                                        predicted_df, use_container_width=True, height=300)
 
-                                st.dataframe(
-                                    predicted_df, use_container_width=True, height=300)
-
-                                st.plotly_chart(prediction.create_residules_scatter(predicted_df),
-                                                use_container_width=True)
+                                    st.plotly_chart(prediction.create_residules_scatter(predicted_df),
+                                                    use_container_width=True)
 
                             else:
                                 st.warning(
@@ -406,3 +407,4 @@ Education Level"""
 
 
 run()
+
