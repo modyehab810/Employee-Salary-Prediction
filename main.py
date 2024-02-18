@@ -183,6 +183,11 @@ Education Level"""
         st.write("***")
 
         data_file = st.file_uploader("Upload Your Dataset 📂")
+        if data_file is not None:
+            if data_file.name.split(".")[-1].lower() != "csv":
+                st.error("Please, Upload CSV FILE ONLY")
+            else:
+                df = pd.read_csv(data_file)
 
         # Home Page
         if page == "Home":
@@ -191,15 +196,7 @@ Education Level"""
                 st.header('Employee Salary Prediction 📈💰')
 
             with content:
-                if data_file is not None:
-                    if data_file.name.split(".")[-1].lower() != "csv":
-                        st.error("Please, Upload CSV FILE ONLY")
-                    else:
-                        df = pd.read_csv(data_file)
-                        st.dataframe(df.sample(frac=0.3, random_state=35).reset_index(drop=True),
-                                     use_container_width=True)
-                else:
-                    st.dataframe(df.sample(frac=0.3, random_state=35).reset_index(drop=True),
+                st.dataframe(df.sample(frac=0.3, random_state=35).reset_index(drop=True),
                                  use_container_width=True)
 
                 st.write("***")
@@ -230,12 +227,6 @@ Education Level"""
                 st.header("Correlations Between Data 📉🚀")
 
             with content:
-                if data_file is not None:
-                    if data_file.name.split(".")[-1].lower() != "csv":
-                        st.error("Please, Upload CSV FILE ONLY")
-                    else:
-                        df = pd.read_csv(data_file)
-
                 st.plotly_chart(relations.create_heat_map(df),
                                 use_container_width=True)
 
