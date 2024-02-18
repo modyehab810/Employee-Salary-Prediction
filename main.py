@@ -7,12 +7,11 @@ from time import sleep
 import pandas as pd
 import numpy as np
 import plotly.express as px
-from sklearn.metrics import mean_squared_error, mean_absolute_error
+from sklearn.metrics import mean_squared_error
 
 import streamlit as st
 from streamlit.components.v1 import html
 from streamlit_option_menu import option_menu
-from streamlit_modal import Modal
 import warnings
 
 pd.set_option('future.no_silent_downcasting', True)
