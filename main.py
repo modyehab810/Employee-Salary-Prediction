@@ -192,9 +192,12 @@ Education Level"""
 
             with content:
                 if data_file is not None:
-                    df = pd.read_csv(data_file)
-                    st.dataframe(df.sample(frac=0.3, random_state=35).reset_index(drop=True),
-                                 use_container_width=True)
+                    if data_file.name.split(".")[-1].lower() != "csv":
+                        st.error("Please, Upload CSV FILE ONLY")
+                    else:
+                        df = pd.read_csv(data_file)
+                        st.dataframe(df.sample(frac=0.3, random_state=35).reset_index(drop=True),
+                                     use_container_width=True)
                 else:
                     st.dataframe(df.sample(frac=0.3, random_state=35).reset_index(drop=True),
                                  use_container_width=True)
