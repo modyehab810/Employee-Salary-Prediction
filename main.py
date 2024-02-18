@@ -231,7 +231,10 @@ Education Level"""
 
             with content:
                 if data_file is not None:
-                    df = pd.read_csv(data_file)
+                    if data_file.name.split(".")[-1].lower() != "csv":
+                        st.error("Please, Upload CSV FILE ONLY")
+                    else:
+                        df = pd.read_csv(data_file)
 
                 st.plotly_chart(relations.create_heat_map(df),
                                 use_container_width=True)
