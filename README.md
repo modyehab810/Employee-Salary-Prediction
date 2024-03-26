@@ -2,7 +2,10 @@
 
 Employee Salary Prediction RandomForestRegressor Model
 
-### The Full Analysis In Kaggle Notebook
+### Web App Link: <a href = "https://employee-salary-prediction-nerktyf5jc2nvoktlyy6x2.streamlit.app/" style = "color: tomato">Click Here To Visit Streamlit Web App</a>🥰📊
+
+### Kaggle Notebook For Full Analysis and Main Steps: <a href = "https://www.kaggle.com/code/muhammadehabmuhammad/employee-salary-prediction-streamlit-app" target="_blank" style = "color: tomato">Click Here To Visit Kaggle Notebbok</a>🥰📊
+
 
 ## Streamlit App
 ### Page
