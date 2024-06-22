@@ -306,7 +306,7 @@ Education Level"""
                                              caption="", width=70)
 
                                     st.subheader("Expected Salary")
-                                    st.subheader(f"${predicted_value}")
+                                    st.subheader(f"฿{predicted_value}")
 
                                 with score_col:
                                     st.image("imgs/accuracy.png",
