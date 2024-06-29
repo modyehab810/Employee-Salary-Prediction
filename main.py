@@ -13,6 +13,8 @@ import streamlit as st
 from streamlit.components.v1 import html
 from streamlit_option_menu import option_menu
 import warnings
+warnings.filterwarnings("ignore", message="numpy.dtype size changed")
+warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
 
 pd.set_option('future.no_silent_downcasting', True)
 pd.options.mode.copy_on_write = "warn"
