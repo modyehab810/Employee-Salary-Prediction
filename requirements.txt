@@ -4,6 +4,6 @@ gunicorn==19.7.1
 scikit-learn==1.2.0
 plotly
 statsmodels==0.14.0
-Python==3.9
-Pandas==2.0.3
-Numpy==2.0
+python==3.9
+pandas==2.0.3
+numpy==2.0
