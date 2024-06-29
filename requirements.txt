@@ -2,7 +2,8 @@ streamlit
 streamlit_option_menu
 gunicorn==19.7.1
 scikit-learn==1.2.0
-numpy
-pandas
 plotly
 statsmodels==0.14.0
+Python= 3.9
+Pandas=2.0.3
+Numpy=2.0
