@@ -7,7 +7,7 @@ import plotly.express as px
 import streamlit as st
 import warnings
 
-pd.set_option('future.no_silent_downcasting', True)
+# pd.set_option('future.no_silent_downcasting', True)
 pd.options.mode.copy_on_write = "warn"
 
 
