@@ -127,7 +127,7 @@ Education Level"""
         }
 
         div[data-testid=stFormSubmitButton]> button{
-            width: 40%;
+            width: 100%;
             background-color: #111;
             border: 2px solid violet;
             padding: 18px;
