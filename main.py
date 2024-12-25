@@ -68,6 +68,10 @@ Education Level"""
          .main {
             text-align: center; 
          }
+         .st-emotion-cache-1ibsh2c {
+             padding-left: 3rem;
+            padding-right: 3rem;
+        }
          .st-emotion-cache-16txtl3 h1 {
          font: bold 29px arial;
          text-align: center;
@@ -80,7 +84,6 @@ Education Level"""
          padding: 8px!important
          
          }
-
          div.block-containers{
             padding-top: 0.5rem
          }
